@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-public class GreetingHandler {
+public class  GreetingHandler {
 
     public Mono<ServerResponse> hello(ServerRequest request) {
         BodyInserter<Greeting, ReactiveHttpOutputMessage> body =
