@@ -1,6 +1,6 @@
 package com.example.WebFlux.config;
 
-import com.example.WebFlux.GreetingHandler;
+import com.example.WebFlux.handler.GreetingHandler;
 import com.example.WebFlux.entity.Greeting;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +23,15 @@ public class GreetingRouter {
                 .route(GET("/hello")
                         .and(accept(MediaType.APPLICATION_JSON)), greetingHandler::hello)
                 .andRoute(GET("/"),
-                        ServerRequest ->
-                                ServerResponse.ok()
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .body(
-                                                BodyInserters.fromValue(new Greeting("Hello, main!"))
-                                        )
-                );
+                        ServerRequest -> {
+                            String name = ServerRequest.queryParam("name").orElse("null");
+                            return ServerResponse
+                                    .ok()
+                                    .body(
+                                            BodyInserters.fromValue(new Greeting("Hello, " + name))
+                                    );
+                        }
+                )
+                .andRoute(GET("/list"), greetingHandler::listName);
     }
 }
